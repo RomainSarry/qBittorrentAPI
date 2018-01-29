@@ -1,10 +1,14 @@
 package qbittorrentapi.beans;
 
+import java.util.List;
+
 /**
  * Created by Romain on 28/01/2018.
  */
 public class QBitTorrent {
     private String category;
+
+    private List<QBitTorrentContent> content;
 
     private String hash;
 
@@ -18,6 +22,14 @@ public class QBitTorrent {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public List<QBitTorrentContent> getContent() {
+        return content;
+    }
+
+    public void setContent(List<QBitTorrentContent> content) {
+        this.content = content;
     }
 
     public String getHash() {
