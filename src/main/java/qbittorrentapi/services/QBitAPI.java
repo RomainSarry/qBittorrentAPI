@@ -35,17 +35,18 @@ public class QBitAPI {
 
     private static String URL_TORRENT_DELETE = URL_BASE + "/command/delete";
 
-    private QBitTorrentList getTorrentListFromUrl(String url) throws IOException {
-        ObjectMapper mapper = buildObjectMapper();
-        return mapper.readValue(new URL(url), new TypeReference<QBitTorrentList>(){});
-    }
+    private static String URL_PAUSE_ALL = URL_BASE + "/command/pauseAll";
+
+    private static String URL_RESUME_ALL = URL_BASE + "/command/resumeAll";
 
     public QBitTorrentList getTorrentList() throws IOException {
-        return getTorrentListFromUrl(URL_TORRENT_LIST);
+        ObjectMapper mapper = buildObjectMapper();
+        return mapper.readValue(new URL(URL_TORRENT_LIST), new TypeReference<QBitTorrentList>(){});
     }
 
     public QBitTorrentList searchTorrents(Map<String, Serializable> parameters) throws IOException {
-        return getTorrentListFromUrl(URL_TORRENT_LIST + "?" + getParamsAsString(parameters));
+        ObjectMapper mapper = buildObjectMapper();
+        return mapper.readValue(new URL(URL_TORRENT_LIST + "?" + getParamsAsString(parameters)), new TypeReference<QBitTorrentList>(){});
     }
 
     public List<QBitTorrentContent> getTorrentContents(String hash) throws IOException {
@@ -63,6 +64,14 @@ public class QBitAPI {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("hashes", hashes));
         postRequest(URL_TORRENT_DELETE, params);
+    }
+
+    public void pauseAllTorrents() throws IOException {
+        postRequest(URL_PAUSE_ALL, null);
+    }
+
+    public void resumeAllTorrents() throws IOException {
+        postRequest(URL_RESUME_ALL, null);
     }
 
     private ObjectMapper buildObjectMapper() {
@@ -86,7 +95,9 @@ public class QBitAPI {
     private void postRequest(String url, List<NameValuePair> parameters) throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(url);
-        post.setEntity(new UrlEncodedFormEntity(parameters));
+        if (parameters != null) {
+            post.setEntity(new UrlEncodedFormEntity(parameters));
+        }
         client.execute(post);
     }
 }
