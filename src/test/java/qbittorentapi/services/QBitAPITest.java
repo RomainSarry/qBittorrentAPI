@@ -1,6 +1,5 @@
 package qbittorentapi.services;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import qbittorrentapi.beans.QBitTorrentContent;
@@ -27,7 +26,7 @@ public class QBitAPITest {
 
     @Before
     public void before() {
-        qBitAPI = new QBitAPI();
+        qBitAPI = new QBitAPI("http://localhost:8282");
     }
 
     @Test

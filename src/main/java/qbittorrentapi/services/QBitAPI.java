@@ -25,53 +25,60 @@ import java.util.Map;
  * Created by Romain on 28/01/2018.
  */
 public class QBitAPI {
-    private static String URL_BASE = "http://localhost:8282";
+    private String urlTorrentList;
 
-    private static String URL_TORRENT_LIST = URL_BASE + "/query/torrents";
+    private String urlTorrentContent;
 
-    private static String URL_TORRENT_CONTENT = URL_BASE + "/query/propertiesFiles";
+    private String urlTorrentDownload;
 
-    private static String URL_TORRENT_DOWNLOAD = URL_BASE + "/command/download";
+    private String urlTorrentDelete;
 
-    private static String URL_TORRENT_DELETE = URL_BASE + "/command/delete";
+    private String urlPauseAll;
 
-    private static String URL_PAUSE_ALL = URL_BASE + "/command/pauseAll";
+    private String urlResumeAll;
 
-    private static String URL_RESUME_ALL = URL_BASE + "/command/resumeAll";
+    public QBitAPI(String urlBase) {
+        urlTorrentList = urlBase + "/query/torrents";
+        urlTorrentContent = urlBase + "/query/propertiesFiles";
+        urlTorrentDownload = urlBase + "/command/download";
+        urlTorrentDelete = urlBase + "/command/delete";
+        urlPauseAll = urlBase + "/command/pauseAll";
+        urlResumeAll = urlBase + "/command/resumeAll";
+    }
 
     public QBitTorrentList getTorrentList() throws IOException {
         ObjectMapper mapper = buildObjectMapper();
-        return mapper.readValue(new URL(URL_TORRENT_LIST), new TypeReference<QBitTorrentList>(){});
+        return mapper.readValue(new URL(urlTorrentList), new TypeReference<QBitTorrentList>(){});
     }
 
     public QBitTorrentList searchTorrents(Map<String, Serializable> parameters) throws IOException {
         ObjectMapper mapper = buildObjectMapper();
-        return mapper.readValue(new URL(URL_TORRENT_LIST + "?" + getParamsAsString(parameters)), new TypeReference<QBitTorrentList>(){});
+        return mapper.readValue(new URL(urlTorrentList + "?" + getParamsAsString(parameters)), new TypeReference<QBitTorrentList>(){});
     }
 
     public List<QBitTorrentContent> getTorrentContents(String hash) throws IOException {
         ObjectMapper mapper = buildObjectMapper();
-        return mapper.readValue(new URL(URL_TORRENT_CONTENT + "/" + hash), new TypeReference<List<QBitTorrentContent>>(){});
+        return mapper.readValue(new URL(urlTorrentContent + "/" + hash), new TypeReference<List<QBitTorrentContent>>(){});
     }
 
     public void addTorrent(String urls, Map<String, Serializable> parameters) throws IOException {
         List<NameValuePair> params = getParamsAsNameValuePairs(parameters);
         params.add(new BasicNameValuePair("urls", urls));
-        postRequest(URL_TORRENT_DOWNLOAD, params);
+        postRequest(urlTorrentDownload, params);
     }
 
     public void deleteTorrent(String hashes) throws IOException {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("hashes", hashes));
-        postRequest(URL_TORRENT_DELETE, params);
+        postRequest(urlTorrentDelete, params);
     }
 
     public void pauseAllTorrents() throws IOException {
-        postRequest(URL_PAUSE_ALL, null);
+        postRequest(urlPauseAll, null);
     }
 
     public void resumeAllTorrents() throws IOException {
-        postRequest(URL_RESUME_ALL, null);
+        postRequest(urlResumeAll, null);
     }
 
     private ObjectMapper buildObjectMapper() {
