@@ -93,8 +93,10 @@ public class QBitAPI {
 
     private List<NameValuePair> getParamsAsNameValuePairs(Map<String, Serializable> parameters) {
         List<NameValuePair> params = new LinkedList<NameValuePair>();
-        for (Map.Entry<String, Serializable> entry : parameters.entrySet()) {
-            params.add(new BasicNameValuePair(entry.getKey(), (String) entry.getValue()));
+        if (parameters != null && !parameters.isEmpty()) {
+            for (Map.Entry<String, Serializable> entry : parameters.entrySet()) {
+                params.add(new BasicNameValuePair(entry.getKey(), (String) entry.getValue()));
+            }
         }
         return params;
     }
@@ -102,7 +104,7 @@ public class QBitAPI {
     private void postRequest(String url, List<NameValuePair> parameters) throws IOException {
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(url);
-        if (parameters != null) {
+        if (parameters != null && !parameters.isEmpty()) {
             post.setEntity(new UrlEncodedFormEntity(parameters));
         }
         client.execute(post);
