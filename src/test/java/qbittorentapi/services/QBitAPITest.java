@@ -61,7 +61,7 @@ public class QBitAPITest {
         }
     }
 
-    @Test
+    // @Test
     public void addTorrent() {
         Map<String, Serializable> params = new HashMap<String, Serializable>();
         params.put("category", "VO");
