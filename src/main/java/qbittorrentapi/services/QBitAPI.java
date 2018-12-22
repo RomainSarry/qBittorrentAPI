@@ -10,10 +10,14 @@ import qbittorrentapi.beans.QBitTorrent;
 import qbittorrentapi.beans.QBitTorrentContent;
 import qbittorrentapi.exceptions.*;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Romain on 28/01/2018.
@@ -62,7 +66,8 @@ public class QBitAPI {
         String url = null;
 
         try {
-            return getRequest(urlString + "/query/torrents" + getParamsAsString(parameters), new TypeReference<List<QBitTorrent>>() {});
+            url = urlString + "/query/torrents" + getParamsAsString(parameters);
+            return getRequest(url, new TypeReference<List<QBitTorrent>>() {});
         } catch (QBitParametersException e) {
             throw e;
         } catch (Exception e) {
@@ -74,7 +79,8 @@ public class QBitAPI {
         String url = null;
 
         try {
-            return getRequest(urlString + "/query/propertiesFiles/" + hash, new TypeReference<List<QBitTorrentContent>>() {});
+            url = urlString + "/query/propertiesFiles/" + hash;
+            return getRequest(url, new TypeReference<List<QBitTorrentContent>>() {});
         } catch (Exception e) {
             throw new QBitTorrentsFetchingException(url);
         }
