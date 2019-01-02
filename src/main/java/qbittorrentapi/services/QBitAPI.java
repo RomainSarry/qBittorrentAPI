@@ -66,7 +66,7 @@ public class QBitAPI {
         String url = null;
 
         try {
-            url = urlString + "/query/torrents" + getParamsAsString(parameters);
+            url = urlString + "/query/torrents?" + getParamsAsString(parameters);
             return getRequest(url, new TypeReference<List<QBitTorrent>>() {});
         } catch (QBitParametersException e) {
             throw e;
